@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cases by Hearing Date</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin-left: 40px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="date"] {
+            padding: 8px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #print-section {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-section, #print-section * {
+                visibility: visible;
+            }
+            #print-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+</head>
+<body>
+	{% include 'header.html' %}
+    <div class="container">
+        <h2>View Cases by Next Hearing Date</h2>
+        <form method="POST">
+            <label>Select Date:</label>
+            <input type="date" name="hearing_date" required>
+            <button type="submit">View Cases</button>
+        </form>
+
+        {% if hearing_date %}
+            {% if cases %}
+                <button onclick="printPage()">🖨️ Print Case List</button>
+                <div id="print-section">
+                    <h3>Cases listed for {{ hearing_date }}:</h3>
+                    <table>
+                        <tr>
+                            <th>Case Number</th>
+                            <th>Case Type</th>
+                            <th>Year</th>
+                            <th>Parties</th>
+                            <th>Court</th>
+                            <th>Judge</th>
+                            <th>Stage</th>
+                            <th>FIR</th>
+                            <th>Remarks</th>
+                        </tr>
+                        {% for case in cases %}
+                        <tr>
+                            <td>{{ case[1] }}</td>
+                            <td>{{ case[2] }}</td>
+                            <td>{{ case[3] }}</td>
+                            <td>{{ case[4] }} vs {{ case[5] }}</td>
+                            <td>{{ case[6] }}</td>
+                            <td>{{ case[11] }}</td>
+                            <td>{{ case[12] }}</td>
+                            <td>{{ case[13] }}</td>
+                            <td>{{ case[14] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% else %}
+                <p>No cases found for this date.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Case History Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+        }
+
+        td a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Case History Manager</h1>
+        <table>
+            <tr>
+                <td><a href="/add">➕ Add a New Case</a></td>
+            </tr>
+            <tr>
+                <td><a href="/search">🔍 Search Cases</a></td>
+            </tr>
+            <tr>
+				<td><a href="/update">✏️ Update Case Details</a></td>
+            </tr>
+            <tr>
+                 <td><a href="/hearing_list">📅 View Hearing List for any Date</a></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

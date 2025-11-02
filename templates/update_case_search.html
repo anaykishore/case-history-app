@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Case</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin-left: 40px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        td, th {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+        }
+
+        button, .edit-button {
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+	{% include 'header.html' %}
+    <div class="container">
+        <h2>Update Case</h2>
+        <p>Please enter any one of the below values to search:</p>
+        <form method="POST">
+            <table>
+                <tr><td>Case Number:</td><td><input type="text" name="case_number"></td></tr>
+                <tr><td>Case Type:</td><td><input type="text" name="case_type"></td></tr>
+                <tr><td>Year:</td><td><input type="text" name="year"></td></tr>
+                <tr><td>First Party:</td><td><input type="text" name="first_party"></td></tr>
+                <tr><td>Second Party:</td><td><input type="text" name="second_party"></td></tr>
+                <tr><td>Court Complex:</td><td><input type="text" name="court_complex"></td></tr>
+                <tr><td>CNR Number:</td><td><input type="text" name="cnr_number"></td></tr>
+                <tr><td>Next Hearing Date:</td><td><input type="date" name="next_hearing"></td></tr>
+                <tr><td>FIR Number:</td><td><input type="text" name="fir_number"></td></tr>
+            </table>
+            <button type="submit">Search</button>
+        </form>
+
+        {% if searched %}
+            <div class="results">
+                {% if results %}
+                    <h3>Matching Cases:</h3>
+                    <table>
+                        <tr>
+                            <th>Case Number</th>
+                            <th>Parties</th>
+                            <th>Next Hearing</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for case in results %}
+                        <tr>
+                            <td>{{ case[1] }}</td>
+                            <td>{{ case[4] }} vs {{ case[5] }}</td>
+                            <td>{{ case[10] }}</td>
+                            <td>
+                                <!--<a href="{{ url_for('edit_case', case_id=case[0]) }}" class="edit-button">Edit</a>-->
+								<a href="{{ url_for('add_case', case_id=case[0]) }}" class="edit-button">Edit</a>
+							</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>No matching cases found.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
