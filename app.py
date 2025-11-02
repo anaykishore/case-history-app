@@ -45,7 +45,6 @@ def add_case():
     case = None
 
     if request.method == 'GET' and case_id:
-        # Fetch existing case data to pre-fill the form
         conn = sqlite3.connect('case_data.db')
         c = conn.cursor()
         c.execute('SELECT * FROM cases WHERE id = ?', (case_id,))
@@ -76,7 +75,6 @@ def add_case():
         c = conn.cursor()
 
         if case_id:
-            # Update existing case
             c.execute('''
                 UPDATE cases SET
                     case_number = ?, case_type = ?, year = ?, first_party = ?, second_party = ?,
@@ -85,7 +83,6 @@ def add_case():
                 WHERE id = ?
             ''', data + (case_id,))
         else:
-            # Insert new case
             c.execute('''
                 INSERT INTO cases (
                     case_number, case_type, year, first_party, second_party,
@@ -103,7 +100,7 @@ def add_case():
 @app.route('/search', methods=['GET', 'POST'])
 def search_case():
     result = []
-    searched = False  # Flag to track if a search was performed
+    searched = False
     if request.method == 'POST':
         searched = True
         filters = {
@@ -126,26 +123,11 @@ def search_case():
                 query = f"SELECT * FROM cases WHERE {field} = ?"
                 c.execute(query, (value,))
                 result = c.fetchall()
-                break  # Only search by the first filled field
+                break
 
         conn.close()
 
     return render_template('search_case.html', results=result, searched=searched)
-
-@app.route('/hearing_list', methods=['GET', 'POST'])
-def hearing_list():
-    cases = []
-    selected_date = None
-
-    if request.method == 'POST':
-        selected_date = request.form.get('hearing_date')
-        conn = sqlite3.connect('case_data.db')
-        c = conn.cursor()
-        c.execute('SELECT * FROM cases WHERE next_hearing = ?', (selected_date,))
-        cases = c.fetchall()
-        conn.close()
-
-    return render_template('hearing_list.html', cases=cases, hearing_date=selected_date)
 
 @app.route('/update', methods=['GET', 'POST'])
 def update_search():
@@ -173,11 +155,26 @@ def update_search():
                 query = f"SELECT * FROM cases WHERE {field} = ?"
                 c.execute(query, (value,))
                 result = c.fetchall()
-                break  # Only search by the first filled field
+                break
 
         conn.close()
 
     return render_template('update_case_search.html', results=result, searched=searched)
+
+@app.route('/hearing_list', methods=['GET', 'POST'])
+def hearing_list():
+    cases = []
+    selected_date = None
+
+    if request.method == 'POST':
+        selected_date = request.form.get('hearing_date')
+        conn = sqlite3.connect('case_data.db')
+        c = conn.cursor()
+        c.execute('SELECT * FROM cases WHERE next_hearing = ?', (selected_date,))
+        cases = c.fetchall()
+        conn.close()
+
+    return render_template('hearing_list.html', cases=cases, hearing_date=selected_date)
 
 if __name__ == '__main__':
     app.run(debug=True)
