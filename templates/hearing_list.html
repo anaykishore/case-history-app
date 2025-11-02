@@ -96,7 +96,7 @@
             {% if cases %}
                 <button onclick="printPage()">🖨️ Print Case List</button>
                 <div id="print-section">
-                    <h3>Cases listed for {{ hearing_date }}:</h3>
+					<h3>Cases listed for {{ hearing_date }}</h3>
                     <table>
                         <tr>
                             <th>Case Number</th>
@@ -119,7 +119,7 @@
                             <td>{{ case[11] }}</td>
                             <td>{{ case[12] }}</td>
                             <td>{{ case[13] }}</td>
-                            <td>{{ case[14] }}</td>
+                            <td></td>
                         </tr>
                         {% endfor %}
                     </table>

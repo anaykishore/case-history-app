@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from datetime import datetime
 import sqlite3
 
 app = Flask(__name__)
@@ -165,16 +166,23 @@ def update_search():
 def hearing_list():
     cases = []
     selected_date = None
+    formatted_date = None
 
     if request.method == 'POST':
         selected_date = request.form.get('hearing_date')
-        conn = sqlite3.connect('case_data.db')
-        c = conn.cursor()
-        c.execute('SELECT * FROM cases WHERE next_hearing = ?', (selected_date,))
-        cases = c.fetchall()
-        conn.close()
+        if selected_date:
+            try:
+                formatted_date = datetime.strptime(selected_date, "%Y-%m-%d").strftime("%d %b %Y")
+            except ValueError:
+                formatted_date = selected_date  # fallback if parsing fails
 
-    return render_template('hearing_list.html', cases=cases, hearing_date=selected_date)
+            conn = sqlite3.connect('case_data.db')
+            c = conn.cursor()
+            c.execute('SELECT * FROM cases WHERE next_hearing = ?', (selected_date,))
+            cases = c.fetchall()
+            conn.close()
+
+    return render_template('hearing_list.html', cases=cases, hearing_date=formatted_date)
 
 if __name__ == '__main__':
     app.run(debug=True)
